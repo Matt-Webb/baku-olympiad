@@ -1,3 +1,10 @@
 {
-    "url": "http://www1.bakuchessolympiad.com/content/53"
+    "open": {
+        "url": "http://www1.bakuchessolympiad.com/content/53",
+        "output": "./data/open_players.json"
+    },
+    "womens": {
+        "url": "http://www1.bakuchessolympiad.com/content/54",
+        "output": "./data/women_players.json"
+    }
 }
