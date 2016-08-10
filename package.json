@@ -1,0 +1,16 @@
+{
+  "name": "baku-olympiad-2016",
+  "version": "1.0.0",
+  "description": "app for managing the fantasy chess olympiad baku 2016",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matthew D Webb",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "htmlparser": "^1.7.7",
+    "request": "^2.74.0"
+  }
+}
