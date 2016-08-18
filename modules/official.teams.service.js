@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /* dependancies */
-const request = require('request');
-const fs = require('fs');
-const cheerio = require('cheerio');
+const request = require( 'request' );
+const fs = require( 'fs' );
+const cheerio = require( 'cheerio' );
 
 const teams = [];
 
@@ -25,9 +25,9 @@ class Team {
 }
 
 const cleanseInfo = data => {
-    if (data) {
-        let info = data.children[0].data;
-        if (info) {
+    if ( data ) {
+        let info = data.children[ 0 ].data;
+        if ( info ) {
             info = info.trim();
         }
         return info;
@@ -39,105 +39,110 @@ const cleanseInfo = data => {
  */
 const processTeams = data => {
 
-    return new Promise((fulfill, reject) => {
+    return new Promise( ( fulfill, reject ) => {
 
-        let $ = cheerio.load(data);
+        let $ = cheerio.load( data );
 
         try {
 
-            $(".country").each(function() {
+            $( ".country" ).each( function () {
 
-                let data = $(this);
-                let country = data.attr('tabindex');
+                let data = $( this );
+                let country = data.attr( 'tabindex' );
                 let team = new Team();
 
                 team.country = country;
 
-                if (country) {
+                if ( country ) {
 
-                    let tableRecord = data.find('table td');
+                    let tableRecord = data.find( 'table td' );
                     team.players = [];
 
                     let captain = new Player();
-                    captain.title = cleanseInfo(tableRecord['3'])
-                    captain.name = cleanseInfo(tableRecord['4']);
-                    captain.rating = cleanseInfo(tableRecord['5']);
+                    captain.title = cleanseInfo( tableRecord[ '3' ] )
+                    captain.name = cleanseInfo( tableRecord[ '4' ] );
+                    captain.rating = cleanseInfo( tableRecord[ '5' ] );
 
                     team.captain = captain;
 
                     let boardOne = new Player();
                     boardOne.board = 1;
-                    boardOne.title = cleanseInfo(tableRecord['9']);
-                    boardOne.name = cleanseInfo(tableRecord['10']);
-                    boardOne.rating = cleanseInfo(tableRecord['11']);
-                    team.players.push(boardOne);
+                    boardOne.title = cleanseInfo( tableRecord[ '9' ] );
+                    boardOne.name = cleanseInfo( tableRecord[ '10' ] );
+                    boardOne.rating = cleanseInfo( tableRecord[ '11' ] );
+                    boardOne.country = country;
+                    team.players.push( boardOne );
 
 
                     let boardTwo = new Player();
                     boardTwo.board = 2;
-                    boardTwo.title = cleanseInfo(tableRecord['12']);
-                    boardTwo.name = cleanseInfo(tableRecord['13']);
-                    boardTwo.rating = cleanseInfo(tableRecord['14']);
-                    team.players.push(boardTwo);
+                    boardTwo.title = cleanseInfo( tableRecord[ '12' ] );
+                    boardTwo.name = cleanseInfo( tableRecord[ '13' ] );
+                    boardTwo.rating = cleanseInfo( tableRecord[ '14' ] );
+                    boardTwo.country = country;
+                    team.players.push( boardTwo );
 
 
                     let boardThree = new Player();
                     boardThree.board = 3;
-                    boardThree.title = cleanseInfo(tableRecord['15']);
-                    boardThree.name = cleanseInfo(tableRecord['16']);
-                    boardThree.rating = cleanseInfo(tableRecord['17']);
-                    team.players.push(boardThree);
+                    boardThree.title = cleanseInfo( tableRecord[ '15' ] );
+                    boardThree.name = cleanseInfo( tableRecord[ '16' ] );
+                    boardThree.rating = cleanseInfo( tableRecord[ '17' ] );
+                    boardThree.country = country;
+                    team.players.push( boardThree );
 
 
                     let boardFour = new Player();
                     boardFour.board = 4;
-                    boardFour.title = cleanseInfo(tableRecord['18']);
-                    boardFour.name = cleanseInfo(tableRecord['19']);
-                    boardFour.rating = cleanseInfo(tableRecord['20']);
-                    team.players.push(boardFour);
+                    boardFour.title = cleanseInfo( tableRecord[ '18' ] );
+                    boardFour.name = cleanseInfo( tableRecord[ '19' ] );
+                    boardFour.rating = cleanseInfo( tableRecord[ '20' ] );
+                    boardFour.country = country;
+                    team.players.push( boardFour );
 
                     let boardFive = new Player();
                     boardFive.board = 5;
-                    boardFive.title = cleanseInfo(tableRecord['21']);
-                    boardFive.name = cleanseInfo(tableRecord['22']);
-                    boardFive.rating = cleanseInfo(tableRecord['23']);
-                    team.players.push(boardFive);
+                    boardFive.title = cleanseInfo( tableRecord[ '21' ] );
+                    boardFive.name = cleanseInfo( tableRecord[ '22' ] );
+                    boardFive.rating = cleanseInfo( tableRecord[ '23' ] );
+                    boardFive.country = country;
+                    team.players.push( boardFive );
 
-                    teams.push(team);
+                    teams.push( team );
 
                 }
-            });
+            } );
 
-            fulfill(teams);
+            fulfill( teams );
 
-        } catch (err) {
-            reject(new Error(err));
+        } catch ( err ) {
+            reject( new Error( err ) );
         }
-    });
+    } );
 }
 
 
 /*
  * This request immediately involves the request for player data
  */
-const getPlayers = (section, output) => {
+const getPlayers = ( section, output ) => {
 
-    request({
+    request( {
         uri: section,
-    }, (error, response, body) => {
+    }, ( error, response, body ) => {
 
-        processTeams(body)
-            .then(teams => {
+        processTeams( body )
+            .then( teams => {
 
-                fs.appendFile(output, JSON.stringify(teams), err => {
-                    if (err) throw err;
-                    console.log('Teams created');
-                });
+                fs.appendFile( output, JSON.stringify( teams ), err => {
+                    if ( err ) throw err;
+                    console.log( 'Teams created' );
+                } );
 
             }, error => {
-                console.log(error.message);
-            });
-    });
+                console.log( error.message );
+            } );
+    } );
 }
 
 module.exports = getPlayers;
